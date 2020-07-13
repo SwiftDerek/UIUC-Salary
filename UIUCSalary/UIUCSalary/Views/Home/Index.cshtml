@@ -1,8 +1,31 @@
-﻿@{
+﻿@model UIUCSalary.Models.ViewModels.IndexViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">UIUC Salary</h1>
+    <p>
+        This site is designed to show % change of salaries for academic employees, positions, departments, and campuses from 2010 to present.
+        <br />It does NOT include data from Civil Service/Hourly employees. For that info, please use Daily Illini's <a href="http://salaryguide.dailyillini.com/#/">website</a>.
+    </p>
+
+    <div class="container">
+        <form asp-controller="Home" asp-action="Index" method="post">
+            <div class="form-group">
+                <div class="col-xs-6">
+                    <select asp-for="Units.FirstOrDefault().UnitId" class="form-control js-example-basic-single" asp-items="@(new SelectList(Model.Units, "UnitID", "DepartmentName"))">
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.js-example-basic-single').select2();
+        });
+    </script>
+}

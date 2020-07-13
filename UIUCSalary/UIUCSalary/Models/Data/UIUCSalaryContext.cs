@@ -9,14 +9,10 @@ namespace UIUCSalary.Models
     {
         private readonly IConfiguration _config;
 
-        public UIUCSalaryContext(IConfiguration config)
-        {
-            _config = config;
-        }
-
-        public UIUCSalaryContext(DbContextOptions<UIUCSalaryContext> options)
+        public UIUCSalaryContext(DbContextOptions<UIUCSalaryContext> options, IConfiguration config)
             : base(options)
         {
+            _config = config;
         }
 
         public virtual DbSet<Employee> Employee { get; set; }
