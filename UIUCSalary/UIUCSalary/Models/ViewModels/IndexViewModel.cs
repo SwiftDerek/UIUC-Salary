@@ -16,6 +16,5 @@ namespace UIUCSalary.Models.ViewModels
 
         public IEnumerable<Unit> Units { get; set; }
 
-        public I
     }
 }

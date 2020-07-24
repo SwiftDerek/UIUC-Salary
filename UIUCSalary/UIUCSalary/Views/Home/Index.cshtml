@@ -10,16 +10,41 @@
         <br />It does NOT include data from Civil Service/Hourly employees. For that info, please use Daily Illini's <a href="http://salaryguide.dailyillini.com/#/">website</a>.
     </p>
 
-    <div class="container">
-        <form asp-controller="Home" asp-action="Index" method="post">
-            <div class="form-group">
-                <div class="col-xs-6">
-                    <select asp-for="Units.FirstOrDefault().UnitId" class="form-control js-example-basic-single" asp-items="@(new SelectList(Model.Units, "UnitID", "DepartmentName"))">
-                    </select>
-                </div>
-            </div>
-        </form>
-    </div>
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Find by name: <input type="text" name="SearchString" />
+                <input type="submit" value="Search" class="btn btn-default btn-success" />
+            </p>
+        </div>
+    </form>
+
+    <table class="table col-sm-6" style="margin-left: 200px;">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().EmployeeName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Employees != null)
+            {
+                @foreach (var item in Model.Employees)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeName)
+                        </td>
+                        <td>
+                            <a asp-action="Salary" asp-route-id="@item.EmployeeId">Salary</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
 </div>
 
 @section Scripts {

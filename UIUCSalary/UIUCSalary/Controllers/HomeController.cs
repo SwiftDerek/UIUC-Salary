@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UIUCSalary.Models;
 using UIUCSalary.Models.ViewModels;
@@ -22,14 +23,36 @@ namespace UIUCSalary.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string searchString)
         {
             IndexViewModel indexViewModel = new IndexViewModel()
             {
-                Employees = _context.Employee.ToList(),
-                Positions = _context.Position.ToList(),
-                Units = _context.Unit.Select(x => x.DepartmentName.Distinct())
+                Employees = await _context.Employee.ToListAsync()
             };
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                indexViewModel.Employees = indexViewModel.Employees.Where(s => s.EmployeeName.Contains(searchString.ToLower()));
+            }
+            else
+            {
+                indexViewModel.Employees = null;
+            }
+            return View(indexViewModel);
+        }
+
+        public async Task<IActionResult> Salary(int EmployeeId)
+        {
+            var totalSalary = _context.Job.Where(s => s.EmployeeId == EmployeeId).Select(s => s.Salary).Sum();
+
+            var employeeGroupedYears = _context.Job.Where(s => s.EmployeeId == EmployeeId).GroupBy(c => c.Year);
+
+
+            IndexViewModel indexViewModel = new IndexViewModel()
+            {
+                Employees = await _context.Employee.ToListAsync()
+            };
+
             return View(indexViewModel);
         }
 
